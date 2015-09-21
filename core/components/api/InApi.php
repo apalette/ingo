@@ -13,6 +13,7 @@
 class InApi{
 	
 	protected static $_error_codes = array(
+		401 => 'Unauthorized',
 		404 => 'The URI requested is invalid',
 		422 => 'Missing parameters'
 	);
