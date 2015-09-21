@@ -17,6 +17,7 @@ class InTheme{
 	public $layout;
 	public $view;
 	public $path;
+	public $json = array();
 	
 	public function __construct() {
 		if (defined('IN_TEMPLATE_DEFAULTS')) {
@@ -53,6 +54,10 @@ class InTheme{
 	
 	public function renderView() {
 		require_once IN_TEMPLATE_PATH.'/'.$this->path.IN_TEMPLATE_VIEWS_PATH.'/'.$this->view.'.php';
+	}
+	
+	public function renderJson() {
+		echo json_encode($this->json);
 	}
 }
 ?>
