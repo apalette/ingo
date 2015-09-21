@@ -15,6 +15,7 @@ class InRouter{
 	protected static $_routes;
 	protected static $_controller;
 	protected static $_context;
+	protected static $_params;
 	
 	protected static function _load() {
 		if (! self::$_routes) {
@@ -53,11 +54,13 @@ class InRouter{
 				else {
 					self::$_controller = $routes['default'][0];
 					self::$_context = isset($routes['default'][1]) ? $routes['default'][1] : IN_CONTEXT_DEFAULT;
+					self::$_params = isset($routes['default'][2]) ? $routes['default'][2] : null;
 				}
 			}
 			else {
 				self::$_controller = $routes[0];
 				self::$_context = isset($routes[1]) ? $routes[1] : IN_CONTEXT_DEFAULT;
+				self::$_params = isset($routes[2]) ? $routes[2] : null;
 			}
 		}
 	}
@@ -72,12 +75,9 @@ class InRouter{
 		return self::$_context;
 	}
 	
-	public static function apply($project) {
+	public static function getParams() {
 		self::_process();
-		if (self::$_controller) {
-			$theme = $project->getTheme();
-			require_once IN_CONTROLLERS_PATH.'/'.self::$_context.'/'.self::$_controller.'.php';
-		}
+		return self::$_params ? self::$_params : array();
 	}
 }
 ?>

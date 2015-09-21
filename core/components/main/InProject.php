@@ -20,13 +20,13 @@ class InProject{
 		$this->_theme = new InTheme();
 		$this->_theme->page = $this->_page;
 		$this->_theme->path = InRouter::getContext();
-		$this->_theme->view = InRouter::getController();
+		$this->_theme->view = $this->_page;
 		
-		InRouter::apply($this);
-	}
-	
-	public function getTheme() {
-		return $this->_theme;
+		if ($this->_page) {
+			$theme = $this->_theme;
+			$project = $this;
+			require_once IN_CONTROLLERS_PATH.'/'.InRouter::getContext().'/'.InRouter::getController().'.php';
+		}
 	}
 }
 ?>
