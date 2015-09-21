@@ -6,7 +6,7 @@ define ('IN_ROUTES', serialize(array(
 	'default' => 'home',
 	'manager' => array('login', 'admin'),
 	'api' => array(
-		'user' => 'user'
+		'user' => array('user', array('id'), 'GET')
 	)
 )));
 ?>

@@ -1,3 +1,3 @@
 <?php
-$api->setError(422);
+$api->data= array('id' => $api->getParam('id'));
 ?>
