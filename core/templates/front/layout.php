@@ -4,9 +4,9 @@
     	<title><?php $this->renderTitle() ?></title>
     	<?php $this->renderMetas() ?>
     	<?php $this->renderCSS() ?>
-    	<?php $this->renderJS() ?>
     </head>
     <body>
     	<?php $this->renderView() ?>
+    	<?php $this->renderJS() ?>
     </body>
 </html>

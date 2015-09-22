@@ -8,6 +8,10 @@
   * @author   apalette
   * @version  1.0 
   * @since    18/09/2015 
+  * 
+  * required display.InCss
+  * required display.InJs
+  * required main.InRequest
   */
   
 class InTheme{
@@ -17,7 +21,15 @@ class InTheme{
 	public $layout;
 	public $view;
 	public $path;
-	public $json = array();
+	public $minify = true;
+	
+	protected $_css = array(
+		array('href' => 'favicon.ico', 'rel' => 'icon', 'type' => 'image/x-icon'),
+		array('href' => 'favicon.ico', 'rel' => 'shortcut icon', 'type' => 'image/x-icon'),
+		array('href' => 'apple-touch-icon.png', 'rel' => 'apple-touch-icon', 'type' => 'image/x-icon'),
+	);
+	protected $_js= array(
+	);
 	
 	public function __construct() {
 		if (defined('IN_TEMPLATE_DEFAULTS')) {
@@ -28,8 +40,25 @@ class InTheme{
 		}
 	}
 	
+	public function appendCss($css) {
+		if (is_string($css)) {
+			$this->_css[] = array('href' => $css, 'rel' => 'stylesheet', 'type' => 'text/css');
+		}
+		elseif (is_array($css) && isset($css['href'])) {
+			$css['rel'] = isset($css['rel']) ? $css['rel'] : 'stylesheet';
+			$css['type'] = isset($css['type']) ? $css['type'] : 'text/css';
+			$this->_css[] = $css;
+		}
+	}
+
+	public function appendJs($js) {
+		if (is_string($js)) {
+			$this->_js[] = $js;
+		}
+	}
+	
 	public function render() {
-		require_once IN_TEMPLATE_PATH.'/'.$this->path.'/'.$this->layout.'.php';
+		require_once IN_TEMPLATES_PATH.'/'.$this->path.'/'.$this->layout.'.php';
 	}
 	
 	public function renderPage() {
@@ -45,19 +74,15 @@ class InTheme{
 	}
 	
 	public function renderCss() {
-		
+		InCss::display($this->_css, $this->minify);
 	}
 	
 	public function renderJs() {
-		
+		InJs::display($this->_js, $this->minify);
 	}
 	
 	public function renderView() {
-		require_once IN_TEMPLATE_PATH.'/'.$this->path.IN_TEMPLATE_VIEWS_PATH.'/'.$this->view.'.php';
-	}
-	
-	public function renderJson() {
-		echo json_encode($this->json);
+		require_once IN_TEMPLATES_PATH.'/'.$this->path.IN_TEMPLATE_VIEWS_PATH.'/'.$this->view.'.php';
 	}
 }
 ?>
