@@ -17,6 +17,7 @@
 class InTheme{
 	
 	public $title;
+	public $description;
 	public $page;
 	public $layout;
 	public $view;
@@ -24,11 +25,19 @@ class InTheme{
 	public $minify = true;
 	
 	protected $_css = array(
-		array('href' => 'favicon.ico', 'rel' => 'icon', 'type' => 'image/x-icon'),
-		array('href' => 'favicon.ico', 'rel' => 'shortcut icon', 'type' => 'image/x-icon'),
-		array('href' => 'apple-touch-icon.png', 'rel' => 'apple-touch-icon', 'type' => 'image/x-icon'),
+		'favicon1' => array('href' => 'favicon.ico', 'rel' => 'icon', 'type' => 'image/x-icon'),
+		'favicon2' => array('href' => 'favicon.ico', 'rel' => 'shortcut icon', 'type' => 'image/x-icon'),
+		'apple-touch-icon' => array('href' => 'apple-touch-icon.png', 'rel' => 'apple-touch-icon', 'type' => 'image/x-icon'),
 	);
+	
 	protected $_js= array(
+	);
+	
+	protected $_metas = array(
+		'charset' => array('charset' => 'utf8'),
+		'http-equiv' => array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge'),
+		'viewport' => array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1'),
+		'description' => array('name' => 'description', 'content' => '')
 	);
 	
 	public function __construct() {
@@ -57,7 +66,14 @@ class InTheme{
 		}
 	}
 	
+	public function appendMeta($meta) {
+		if (is_array($meta)) {
+			$this->_metas[] = $meta;
+		}
+	}
+	
 	public function render() {
+		$this->_metas['description']['content'] = $this->description;
 		require_once IN_TEMPLATES_PATH.'/'.$this->path.'/'.$this->layout.'.php';
 	}
 	
@@ -70,7 +86,13 @@ class InTheme{
 	}
 	
 	public function renderMetas() {
-		
+		foreach ($this->_metas as $meta) {
+			echo '<meta';
+			foreach($meta as $k => $v) {
+				echo ' '.$k.'="'.$v.'"';
+			}
+			echo ' />';
+		}
 	}
 	
 	public function renderCss() {
