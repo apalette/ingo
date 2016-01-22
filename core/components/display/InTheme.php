@@ -40,6 +40,9 @@ class InTheme{
 		'description' => array('name' => 'description', 'content' => '')
 	);
 	
+	protected $_vars = array(
+	);
+	
 	public function __construct() {
 		if (defined('IN_TEMPLATE_DEFAULTS')) {
 			$config = unserialize(IN_TEMPLATE_DEFAULTS);
@@ -47,6 +50,8 @@ class InTheme{
 				$this->$i = $v;
 			}
 		}
+		
+		$this->_vars['webroot'] = InRequest::getWebroot();
 	}
 	
 	public function appendCss($css) {
@@ -74,6 +79,7 @@ class InTheme{
 	
 	public function render() {
 		$this->_metas['description']['content'] = $this->description;
+		extract($this->_vars);
 		require_once IN_TEMPLATES_PATH.'/'.$this->path.'/'.$this->layout.'.php';
 	}
 	
@@ -104,7 +110,12 @@ class InTheme{
 	}
 	
 	public function renderView() {
+		extract($this->_vars);
 		require_once IN_TEMPLATES_PATH.'/'.$this->path.IN_TEMPLATE_VIEWS_PATH.'/'.$this->view.'.php';
+	}
+	
+	public function setVar($name, $value) {
+		$this->_vars[$name] = $value;
 	}
 }
 ?>
