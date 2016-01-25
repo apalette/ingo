@@ -22,6 +22,13 @@ class InProject{
 		$this->_theme->path = InRouter::getContext();
 		$this->_theme->view = $this->_page;
 		
+		// Project dependencies
+		$dep_path = dirname(dirname(dirname(dirname(__FILE__)))).'/project/index.php';
+		if (file_exists($dep_path)) {
+			require_once($dep_path);
+		}
+		
+		// Load Controller
 		if ($this->_page) {
 			$theme = $this->_theme;
 			$project = $this;

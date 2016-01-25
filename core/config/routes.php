@@ -5,6 +5,7 @@ define ('IN_MINIFIER', 'min.php');
 
 define ('IN_ROUTES', serialize(array(
 	'default' => 'home',
+	'support' => 'support',
 	'manager' => array('login', 'admin'),
 	'api' => array(
 		'user' => array('user', array('id', 'token'), 'GET')
