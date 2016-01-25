@@ -35,5 +35,10 @@ class InProject{
 			require_once IN_CONTROLLERS_PATH.'/'.InRouter::getContext().'/'.InRouter::getController().'.php';
 		}
 	}
+	
+	public function redirect($path) {
+		header("Location:".(InRequest::getWebroot().$path));
+		die();
+	}
 }
 ?>
