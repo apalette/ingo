@@ -19,6 +19,7 @@ class InSql {
 	protected $_query;
 	protected $_data;
 	protected $_type;
+	protected $_params;
 		
 	public function __construct(){
 		if (! self::$_config) {
@@ -33,6 +34,15 @@ class InSql {
 	
 	public function select($columns = '*'){
 		$this->_data = array();
+		$this->_params = array();
+		$this->_type = 1;
+		$this->_query = 'SELECT '.(is_array($columns) ? implode(',', $columns) : $columns);
+		return $this;
+    }
+	
+	public function selectOne($columns = '*'){
+		$this->_data = array();
+		$this->_params = array('one' => true);
 		$this->_type = 1;
 		$this->_query = 'SELECT '.(is_array($columns) ? implode(',', $columns) : $columns);
 		return $this;
@@ -94,6 +104,7 @@ class InSql {
 	
 	public function insert($table, $data) {
 		$this->_data = array();
+		$this->_params = array();
 		$this->_type = 2;
 		
 		$keys = array();
@@ -163,7 +174,12 @@ class InSql {
 			// select
 			case 1 :
 				$rows = $sql->fetchAll(PDO::FETCH_ASSOC);
-				return ($rows && is_array($rows)) ? $rows : array();
+				if (! isset($this->_params['one'])) {
+					return ($rows && is_array($rows)) ? $rows : array();
+				}
+				else {
+					return ($rows && is_array($rows)) ? $rows[0] : null;
+				}
 			
 			// insert	
 			case 2 :
