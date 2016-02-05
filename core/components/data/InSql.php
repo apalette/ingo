@@ -91,6 +91,29 @@ class InSql {
 		}
 		return $this;
 	}
+	
+	public function insert($table, $data) {
+		$this->_data = array();
+		$this->_type = 2;
+		
+		$keys = array();
+		$values = array();
+		
+		foreach ($data as $key => $value) {
+			$keys[] = $key;
+			
+			if ($value === null) {
+				$values[] = 'NULL';
+			}
+			else {
+				$values[] = ':i_'.$key;
+				$this->_data[':i_'.$key] = $value;
+			}
+		}
+		
+		$this->_query = 'INSERT INTO '.$table.'('.implode(',', $keys).') VALUES ('.implode(',', $values).')';
+		return $this;
+	}
 
 	public function execute(){
 		$c = $this->_connect();
@@ -99,8 +122,9 @@ class InSql {
 			$sql = $c->prepare($this->_query);
 			try {
 				if ($sql->execute($this->_data)) {
-					$r = $this->_result($sql);
+					$r = $this->_result($c,$sql);
 					$c = $sql = null;
+					
 					return $r;
 				}
 			}	
@@ -133,11 +157,18 @@ class InSql {
 		return false;
 	}
 	
-	protected function _result($sql) {
+	protected function _result($c, $sql) {
 		switch($this->_type) {
+			
+			// select
 			case 1 :
 				$rows = $sql->fetchAll(PDO::FETCH_ASSOC);
 				return ($rows && is_array($rows)) ? $rows : array();
+			
+			// insert	
+			case 2 :
+				return $c->lastInsertId();
+				
 			default :
 				return null;
 		}
