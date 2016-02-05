@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 define ('IN_CORE_PATH', __DIR__);
 define ('IN_CONFIG_PATH', IN_CORE_PATH.'/config');
 define ('IN_COMPONENTS_PATH', IN_CORE_PATH.'/components');
