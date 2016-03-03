@@ -53,6 +53,16 @@ class InSql {
 		return $this;
     }
 	
+	public function join($table, $on, $dir = 'LEFT') {
+		$this->_query .= ' '.$dir.' JOIN '.$table.' ';
+		if (is_array($on)) {
+			$v = reset($on);
+			$k = key($on);
+			$this->_query .= 'ON '.($k.'='.$v).' ';
+		}
+		return $this;
+	}
+	
 	public function where($conditions) {
 		if (is_array($conditions)) {
 			$this->_query .= ' WHERE';
