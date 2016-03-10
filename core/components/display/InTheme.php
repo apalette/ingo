@@ -54,6 +54,15 @@ class InTheme{
 		$this->_vars['webroot'] = InRequest::getWebroot();
 	}
 	
+	public function setFavicon($favicon) {
+		$this->_css['favicon1']['href'] = $favicon;
+		$this->_css['favicon2']['href']  = $favicon;
+	}
+	
+	public function setAppleTouchIcon($icon) {
+		$this->_css['apple-touch-icon']['href'] = $icon;
+	}
+	
 	public function appendCss($css) {
 		if (is_string($css)) {
 			$this->_css[] = array('href' => $css, 'rel' => 'stylesheet', 'type' => 'text/css');
