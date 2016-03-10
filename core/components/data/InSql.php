@@ -112,6 +112,26 @@ class InSql {
 		return $this;
 	}
 	
+	public function update($table, $data) {
+		$this->_data = array();
+		$this->_params = array();
+		$this->_type = 3;
+		
+		$this->_query = 'UPDATE '.$table.' SET';
+		foreach ($data as $key => $value) {
+			if ($value === null) {
+				$this->_query.= ' '.$key.' = NULL, ';
+			}
+			else {
+				$this->_data[':u_'.$key] = $value;
+				$this->_query.= ' '.$key.' = :u_'.$key.', ';
+			}
+		}
+		$this->_query = substr($this->_query, 0, strlen($this->_query) -2);
+		
+		return $this;
+	}
+	
 	public function insert($table, $data) {
 		$this->_data = array();
 		$this->_params = array();
@@ -194,6 +214,10 @@ class InSql {
 			// insert	
 			case 2 :
 				return $c->lastInsertId();
+				
+			// update
+			case 3 :
+				return true;
 				
 			default :
 				return null;
